@@ -114,12 +114,14 @@ class AwsS3Client {
     // HttpOverrides.global = new MyHttpOverrides();
   }
 
-  Future<ListBucketResult?> listObjects({String? prefix, String? delimiter, int? maxKeys}) async {
+  Future<ListBucketResult?> listObjects({String? prefix, String? delimiter, int? maxKeys, String? startAfterId}) async {
     final response = await _doSignedGetRequest(key: '', queryParams: {
       "list-type": "2",
       if (prefix != null) "prefix": prefix,
       if (delimiter != null) "delimiter": delimiter,
-      if (maxKeys != null) "maxKeys": maxKeys.toString(),
+      // if (maxKeys != null) "maxKeys": maxKeys.toString(),
+      if (maxKeys != null) "max-keys": maxKeys.toString(),
+      if (startAfterId != null) "start-after": startAfterId,
     });
     _checkResponseError(response);
     return _parseListObjectResponse(response.body);
